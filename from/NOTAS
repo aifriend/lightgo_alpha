@@ -1,0 +1,106 @@
+RONDA
+-----
+* Cada casilla incrementará su cantidad de energía libre disponible según la siguiente fórmula: energía += floor(5 - distancia a faro)
+* Cada jugador obtendrá de su casilla actual la cantidad de energía libre presente en ella, que se reducirá a cero
+* Si varios jugadores comparten casilla, cada uno recibirá la fracción correspondiente (si hay resto tras la división, la energía restante se pierde)
+* Si un jugador está situado sobre un faro, obtendrá su clave si no dispone ya de ella. Esto ocurre indistintamente de si el faro está controlado por el o no.
+* La energía de todos los faros se decrementa en 10 puntos. Si llega a cero, el faro pasa a ser neutro y desaparecen todas las conexiones con él.
+
+NN
+--
+* Vamos a aprender tantos modelos como: game_dimensions x num_players
+
+ACTORES (player_name, health, carrying, money, remaining_time)
+-------
+* Energia:
+    - 0u (inicial)
+    - Los faros generan energía de forma continua en las casillas cercanas a ellos.
+        X = cantidad de energia disponible => gold
+    - Maximo 100u por casilla
+* Jugador:
+    - Se mueven libremente y acumulan energia sin limite
+        X = cantidad de energia acumulada
+    - El jugador recoge el total de la energia del casilla que visita
+        X = numero de jugadores
+* Faro:
+    - Cada faro puede ser neutro o estar controlado por un jugador (aportando energia)
+        X = auto-control (bool)
+    - Esta energía disminuirá con el tiempo, y cuando llega a 0 el faro pasará a ser neutro de nuevo
+        X = energia disponible
+    - No hay un máximo de energía por faro
+    - Si un jugador está situado sobre un faro, obtendrá su clave indistintamente de si el faro está controlado por el o no
+        X = clave
+    - Todos los faron pierden 10u por ronda hasta llegar a 0u que es cuando pasan a ser neutros
+        X = numero de ticks de juego
+* Ronda/Tick
+    - Incremento de 10u por casilla
+    - Decremento de 10u por faro
+        X = numero de ticks de juego
+* Dimensiones
+    - dimensiones del trablero de juego
+        X = dimensiones
+
+ACCIONES (act_type)
+--------
+* Nada
+* Moverse
+    - 8p
+* Atacar faro: el jugador aporta una cantidad de energía de su elección. Si el faro no está bajo su control, se resta total o parcialmente
+la energía presente en el faro. Cuando toda la energía del faro ha sido eliminada, el sobrante de energía aportada se suma de nuevo al faro
+y el faro pasa a estarcontrolado por el jugador actual
+    - Atacar con toda la energia
+* Conectar faro: conectarlo a otro faro bajo el control del mismo jugador. Para ello, el jugador debe disponer de la clave del faro remoto, y la perderá
+al crear la conexión
+    - True
+
+INPUT
+-----
+* Solo una vez por JUEGO:
+    - Su número de jugador
+    - El número de jugadores total
+    - Su posición inicial
+    - El mapa (es decir un mapa booleano de qué casillas forman parte de la isla)
+    - Por cada faro sus coordenadas
+* Por RONDA:
+    - Su posición
+    - Su puntuación
+    - Su nivel de energía acumulada
+    - Por cada casilla cuyo centro se haya a 3 unidades o menos del jugador (en línea recta):
+        X La cantidad de energía libre disponible en ella.
+    - Por cada faro:
+        X Sus coordenadas (como identificador)
+        X El jugador que lo controla (0, 1, 2, ... o ninguno=-1)
+        X Su nivel de energía (cero si no está bajo control)
+        X La lista de faros a los cuales está conectado (por lo tanto cada conexión se indicará por duplicado, desde ambos vértices).
+        X Si se dispone de su clave o no.
+
+PUNTUACION
+----------
+Cada jugador tendrá una puntuación (0 al comienzo de la partida), que es un
+número entero. Se obtendrán puntos al término de cada ronda de la siguiente
+forma:
+
+- 2 puntos por cada faro bajo control del jugador.
+- 2 puntos por cada pareja de faros conectados bajo el control del jugador.
+- Por cada 3 faros conectados entre sí bajo su control (formando un triángulo):
+  - 1 punto por cada casilla cuyo centro esté dentro de dicho triángulo.
+
+  Nota 1: es posible que las áreas se solapen, y, en ese caso, puntúan doble.
+  Por ejemplo, en esta configuración de faros conectados existen 3 triángulos
+  interiores y un triángulo exterior, de forma que la cantidad de puntos
+  otorgados será equivalente al DOBLE del área del triángulo exterior.
+
+  o-----o
+   \`o'/
+    \|/
+     o
+
+  Igualmente, es posible que un área de un jugador contenga completamente a
+  un área de otro jugador. En este caso cada jugador obtiene sus puntos
+  correspondientes. Es decir, la casilla se puede "iluminar" de una mezcla de
+  colores.
+
+  Nota 2: Cuando un lado del triángulo pasa por el centro de una casilla, se
+  utilizará la regla de rasterización de OpenGL para determinar qué casillas
+  se consideran como parte del área (cuentan las casillas superiores y a la
+  izquierda): http://goo.gl/f1cxU

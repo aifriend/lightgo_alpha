@@ -1,0 +1,51 @@
+INSTALLATION NOTES
+==================
+
+For searching anaconda-cloud for non default libraries like pygame:
+	conda install anaconda-client
+	anaconda search -t conda pygame
+	conda install --channel https://conda.anaconda.org/CogSci pygame
+
+For package inconsistency fixing:
+	conda install anaconda
+
+For Jupyter Notebook (kernels):
+	conda activate myenv
+	python -m ipykernel install --user --name myenv --display-name "Python (myenv)"
+
+For conda update
+	conda update -n base -c defaults conda
+
+For project requirements
+	pip freeze
+
+For checks:
+	which python
+	which pip
+	python -V
+	pip -V
+
+Remove Python versions (ie: 2.7):
+	* sudo rm -rf /Library/Frameworks/Python.framework/Versions/2.7
+	* sudo rm -rf "/Applications/Python 2.7"
+	* cd /usr/local/bin/
+	* ls -l /usr/local/bin | grep '../Library/Frameworks/Python.framework/Versions/2.7' | awk '{print $9}' | tr -d @ | xargs rm
+	* /Library/Frameworks/Python.framework/Versions/2.7 to your PATH environment file. Depending on which shell you use, any of the following files may have been modified: ~/.bash_login, ~/.bash_profile, ~/.cshrc, ~/.profile, ~/.tcshrc, and/or ~/.zprofile
+
+For brew installation
+	brew install python3
+
+Dependencies
+	pip freeze > requirements.txt
+	pip install -r requirements.txt
+	---
+	pip list
+	pip install pipreqs
+	pipreqs .
+	pip install -r requirements.txt
+
+For Jupyter notebook
+    conda install ipykernel
+    jupyter kernelspec list
+    sudo jupyter kernelspec uninstall "jupyter-env-name"
+    python -m ipykernel install --user --name myenv --display-name "Python (myenv)"

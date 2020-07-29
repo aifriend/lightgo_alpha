@@ -1,0 +1,6 @@
+numpy~=1.18.5
+tensorflow~=2.3.0
+tqdm~=4.48.0
+coloredlogs~=14.0
+torch~=1.5.1
+chainer~=7.4.0

@@ -1,0 +1,18 @@
+* Pre-round y post-round no pueden depender del uso de LHGame. Solo deben depender del board
+* Post-round lo podemos hacer de solo lectura para que valore los score sin modificar el board
+* Los getValidMoves deben de tener una lectura generica sin modificar los datos subyacentes
+* Vamos a tener que modificar getValidMoves para que podamos pasar el valor de la accion que hayamos elegido para ejecutar en getNextState
+* El flujo de accion es el siguiente:
+    1) Aprendermos con learn
+    2) Creamos nnet para ambos players
+    3) Con el Coach generamos los ejemplos de juego para entrenar nnet
+    4) Cada ejemplo de juego tiene una profundidad de busqueda con MCTS
+    5) Al finalizar esa profundidad de simulacion elegimos una accion
+    6) Ejecutamos esa accion y creamos un nuevo estado. Repetimos esta acción hasta llegar al final del juego
+    7) En este punto guardamos la secuencia de juego completa y volvemos a jugar tantas veces como hayamos configurado el aprendizaje
+    8) Al finalizar todos los juegos usamos esos datos para entrenar una nueva nnet
+    9) Una vez entrenada la red juegan en la Arena la old-nnet y la new-nnet
+    10) Si la nueva gana a la vieja la nueva la usamos en el puesto de la vieja y repetimos de nuevo tantas iteraciones como hayamos configurado
+* La clase Arena tiene como entrada un delegado anonimo o expresion lambda que recibe un board(array) y devuelve una accion (int)
+* La clase LHPlayer tiene la misma firma que necesita la clase Arena
+* El script pit ejecuta un juego entre jugadores pre-definidos

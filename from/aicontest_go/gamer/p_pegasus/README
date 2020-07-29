@@ -1,0 +1,11 @@
+Name: Pegasus v1.0
+Author: aifriend
+Licence: GPL
+
+Robot that plays with IA
+
+Requirements:
+	Python v3.7.x
+
+Uso:
+$ python2.7 engine/game.py maps/<mapa.txt> 'python3 player/p_pegasus/pegasus.py
