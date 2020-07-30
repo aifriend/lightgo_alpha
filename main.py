@@ -14,7 +14,7 @@ coloredlogs.install(level='INFO')  # Change this to DEBUG to see more info.
 
 working_path = os.path.dirname(os.path.realpath(__file__))
 args = dotdict({
-    'numIters': 1000,
+    'numIters': 10,
     'numEps': 100,  # Number of complete self-play games to simulate during a new iteration.
     'tempThreshold': 15,
     'updateThreshold': 0.6,

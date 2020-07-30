@@ -3,12 +3,11 @@
 An implementation of a simple game provided to check extendability of the framework. Main difference of this game comparing to Othello is that it allows draws, i.e. the cases when nobody won after the game ended. To support such outcomes ```Arena.py``` and ```Coach.py``` classes were modified. Neural network architecture was copy-pasted from the game of Othello, so possibly it can be simplified. 
 
 To train a model for TicTacToe, change the imports in ```main.py``` to:
-```python
-from Coach import Coach
-from tictactoe.TicTacToeGame import TicTacToeGame
-from tictactoe.keras.NNet import NNetWrapper as nn
-from utils import *
-```
+* from Coach import Coach
+* from tictactoe.TicTacToeGame import TicTacToeGame
+* from tictactoe.keras.NNet import NNetWrapper as nn
+* from utils import *
+
 
 and the first line of ```__main__``` to
 ```python
